@@ -1,5 +1,5 @@
-#ifndef SOFT_I2C_H
-#define SOFT_I2C_H
+#ifndef HARD_I2C_H
+#define HARD_I2C_H
 
 /**
   Section: Included Files
@@ -16,16 +16,17 @@
 #endif
 
        
-void I2C_start();
-void I2C_send(unsigned char);
+int I2C_start();
+int I2C_restart();
+int I2C_send(unsigned char);
 unsigned char I2C_ackchk();
-void I2C_acksnd();
-void I2C_nacksnd();
-unsigned char I2C_rcv();
-void I2C_stop();
+int I2C_acksnd();
+int I2C_nacksnd();
+uint16_t I2C_rcv();
+int I2C_stop();
 
 
-#endif	//SOFT_I2C_H
+#endif	//HARD_I2C_H
 /**
  End of File
 */

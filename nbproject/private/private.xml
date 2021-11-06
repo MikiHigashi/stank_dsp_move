@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Z:/S-TANK/足回り/stank_dsp_move.X/mcc_generated_files/i2c1_driver.c</file>
+            <file>file:/Z:/S-TANK/足回り/stank_dsp_move.X/lcd_i2c.c</file>
+            <file>file:/Z:/S-TANK/足回り/stank_dsp_move.X/adxl355.c</file>
+            <file>file:/Z:/S-TANK/足回り/stank_dsp_move.X/main.c</file>
+            <file>file:/Z:/S-TANK/足回り/stank_dsp_move.X/adxl355.h</file>
+        </group>
     </open-files>
 </project-private>

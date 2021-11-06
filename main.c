@@ -4,7 +4,7 @@
 #include "mcc_generated_files/mcc.h"
 #include <stdio.h>
 #include <string.h>
-#include "soft_i2c.h"
+#include "hard_i2c.h"
 #include "lcd_i2c.h"
 #include "adxl355.h"
 
@@ -174,6 +174,8 @@ uint16_t table_pwm[] = {
 PWM4 data1, data2; // SPI送信するデーター
 uint8_t motor; // SPI送信するデーター
 uint8_t step_val[2]; // ステッピングモーター値
+signed short hosei = 0; // 補正量
+signed long cannon = 0; // 仰角
 
 #define SPI_BYTES 8 /* SPI受信するデーターのバイト数 */
 uint8_t data[SPI_BYTES]; // SPI受信格納先
@@ -182,19 +184,28 @@ ADXL355 a;
 
 char buf[32];
 
+extern uint8_t flg;
+
 
 
 // SPI受信
 void int_strb(void) {
     if (SPI2_STRB_GetValue() == 0) return;
 
+    uint16_t t;
     uint8_t idx, b, d, *dp = data;
     for (idx=0; idx<SPI_BYTES; idx++) {
         d = 0;
         for (b=0; b<8; b++) {
-            while (SPI2_CLOCK_GetValue() == 0) {} // CLOCK立ち上がりをソフトループで待つ
+            t = 0;
+            while (SPI2_CLOCK_GetValue() == 0) {
+                if ((t++) > 1000) return;
+            } // CLOCK立ち上がりをソフトループで待つ
             d <<= 1;
-            while (SPI2_CLOCK_GetValue() == 1) {} // CLOCK立ち下がりをソフトループで待つ
+            t = 0;
+            while (SPI2_CLOCK_GetValue() == 1) {
+                if ((t++) > 1000) return;
+            } // CLOCK立ち下がりをソフトループで待つ
             d |= SPI2_DATA_GetValue();
         }
         (*(dp++)) = d;
@@ -212,7 +223,7 @@ void spi_send(void) {
     // クロックを1にするまで15μ秒以上空けるのを仕様とする
     SPI_STRB_SetHigh();
     __delay_us(14);
-    char i;
+
     SPI_STRB_SetLow();
     for (idx=0; idx<SPI_BYTES2; idx++) {
         d1 = (*(dp1++));
@@ -399,23 +410,26 @@ void neutral_position(void) {
 
 int main(void)
 {
-    uint8_t i, left, right;
-    uint16_t t;
-
     // initialize the device
     SYSTEM_Initialize();
     CN_SetInterruptHandler(int_strb);
+    i2c1_driver_driver_open();
+    i2c1_driver_initSlaveHardware();
 
-    signed short hosei = 0; // 補正量
-    signed long cannon = 0; // 仰角
     neutral_position();
     
+    WATCHDOG_TimerClear();
     __delay_ms(100);    
-//  LCD_i2c_init(8);
-    ADXL355_init(6);
-
-    uint8_t can;
+    WATCHDOG_TimerClear();
+    LCD_i2c_init(8);
+    while (ADXL355_init(6)) {
+        i2c1_driver_close();            
+        i2c1_driver_driver_open();
+        i2c1_driver_initSlaveHardware();
+    }
     
+    uint8_t can;
+uint16_t dc = 0;    
     data[0] = data[1] = data[2] = data[3] = 0;
     data[4] = data[5] = data[6] = data[7] = 0x80; // 停止
     motor = step_val[0] = step_val[1] = 128;
@@ -425,19 +439,7 @@ int main(void)
         WATCHDOG_TimerClear();
 
         motor = step_val[0] = data[4];
-//        if ((motor >=120) && (motor <=136)) {
-            step_val[1] = data[6];
-//        }
-//        else {
-//            uint8_t stp = data[6];
-//            if (stp > 128) {
-//                stp += ((255 - stp) >> 1);
-//            }
-//            if (stp < 128) {
-//                stp -= (stp >> 1);
-//            }
-//            step_val[1] = stp;
-//        }
+        step_val[1] = data[6];
 
         can = data[7];
         if (can > 128) { // ↑に
@@ -453,31 +455,28 @@ int main(void)
             }
         }
 
-        if ((data[0] & 1) == 0) { // 通信エラーもしくはノーコン
-            waiting_position();
+        if ((data[0] & 12) && (data[1] & 12)) { // 左右の下トリムを同時押し
+            waiting_position(); // サスアーム収納ポジション
+        }
+        else if (data[1] & 3) {
+            neutral_position();
         }
         else {
             signed long x = ADXL355_readAcc(ADXL355_ADR_X);
-            x >>= 12; // 事実上は符号だけ必要
-            hosei += (signed short)x;
+            if (x == 9999999) {
+                i2c1_driver_close();            
+                i2c1_driver_driver_open();
+                i2c1_driver_initSlaveHardware();
+            }
+            else {
+                x >>= 10; // 事実上は符号だけ必要 >>12 標準だがそれは少し精度落ち
+                hosei += (signed short)x;
+                set_servo(cannon, hosei);
 
-//            hosei = (data[5] - 128);
-//            hosei <<= 5;
-
-            set_servo(cannon, hosei);
-        
-//        LCD_i2C_cmd(0x80);
-//        sprintf(buf, "A%05d B%05d", data2.pwm[3], data2.pwm[2]);
-//        LCD_i2C_data(buf);
-//        LCD_i2C_cmd(0xC0);
-//        sprintf(buf, "C%05d D%05d", data1.pwm[0], data1.pwm[1]);
-//        LCD_i2C_data(buf);
-
-//            LCD_i2C_cmd(0x80);
-//            sprintf(buf, "%3d %3d", data[4], data[6]);
-//            sprintf(buf, "FB=%3d LR=%3d", motor, step_val);
-//            LCD_i2C_data(buf);
-
+                LCD_i2C_cmd(0x80);
+                sprintf(buf, "%5d %3d %5d", dc++, flg, (signed short)x);
+                LCD_i2C_data(buf);
+            }
         }
         __delay_ms(1);
     }

@@ -67,11 +67,11 @@ typedef struct tagADXL355 {
 } ADXL355;
 
 
-void ADXL355_write(uint8_t regset, uint8_t regdata);
-void ADXL355_setadr(uint8_t addr);
-void ADXL355_init(uint8_t sample);
+int ADXL355_write(uint8_t regset, uint8_t regdata);
+int ADXL355_setadr(uint8_t addr);
+int ADXL355_init(uint8_t sample);
 signed char ADXL355_calt(uint16_t t);
-void ADXL355_read(ADXL355 *v);
+int ADXL355_read(ADXL355 *v);
 signed long ADXL355_readAcc(uint8_t addr);
 
 

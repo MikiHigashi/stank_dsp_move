@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=mcc_generated_files/reset.c mcc_generated_files/system.c mcc_generated_files/clock.c mcc_generated_files/traps.c mcc_generated_files/interrupt_manager.c mcc_generated_files/mcc.c mcc_generated_files/pin_manager.c mcc_generated_files/spi2.c mcc_generated_files/pwm.c mcc_generated_files/i2c1.c mcc_generated_files/dma.c mcc_generated_files/tmr2.c main.c lcd_i2c.c soft_i2c.c adxl355.c
+SOURCEFILES_QUOTED_IF_SPACED=mcc_generated_files/reset.c mcc_generated_files/system.c mcc_generated_files/clock.c mcc_generated_files/traps.c mcc_generated_files/interrupt_manager.c mcc_generated_files/mcc.c mcc_generated_files/pin_manager.c mcc_generated_files/spi2.c mcc_generated_files/pwm.c mcc_generated_files/dma.c mcc_generated_files/i2c1_driver.c main.c lcd_i2c.c adxl355.c hard_i2c.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/mcc_generated_files/reset.o ${OBJECTDIR}/mcc_generated_files/system.o ${OBJECTDIR}/mcc_generated_files/clock.o ${OBJECTDIR}/mcc_generated_files/traps.o ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o ${OBJECTDIR}/mcc_generated_files/mcc.o ${OBJECTDIR}/mcc_generated_files/pin_manager.o ${OBJECTDIR}/mcc_generated_files/spi2.o ${OBJECTDIR}/mcc_generated_files/pwm.o ${OBJECTDIR}/mcc_generated_files/i2c1.o ${OBJECTDIR}/mcc_generated_files/dma.o ${OBJECTDIR}/mcc_generated_files/tmr2.o ${OBJECTDIR}/main.o ${OBJECTDIR}/lcd_i2c.o ${OBJECTDIR}/soft_i2c.o ${OBJECTDIR}/adxl355.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/mcc_generated_files/reset.o.d ${OBJECTDIR}/mcc_generated_files/system.o.d ${OBJECTDIR}/mcc_generated_files/clock.o.d ${OBJECTDIR}/mcc_generated_files/traps.o.d ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o.d ${OBJECTDIR}/mcc_generated_files/mcc.o.d ${OBJECTDIR}/mcc_generated_files/pin_manager.o.d ${OBJECTDIR}/mcc_generated_files/spi2.o.d ${OBJECTDIR}/mcc_generated_files/pwm.o.d ${OBJECTDIR}/mcc_generated_files/i2c1.o.d ${OBJECTDIR}/mcc_generated_files/dma.o.d ${OBJECTDIR}/mcc_generated_files/tmr2.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/lcd_i2c.o.d ${OBJECTDIR}/soft_i2c.o.d ${OBJECTDIR}/adxl355.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/mcc_generated_files/reset.o ${OBJECTDIR}/mcc_generated_files/system.o ${OBJECTDIR}/mcc_generated_files/clock.o ${OBJECTDIR}/mcc_generated_files/traps.o ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o ${OBJECTDIR}/mcc_generated_files/mcc.o ${OBJECTDIR}/mcc_generated_files/pin_manager.o ${OBJECTDIR}/mcc_generated_files/spi2.o ${OBJECTDIR}/mcc_generated_files/pwm.o ${OBJECTDIR}/mcc_generated_files/dma.o ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o ${OBJECTDIR}/main.o ${OBJECTDIR}/lcd_i2c.o ${OBJECTDIR}/adxl355.o ${OBJECTDIR}/hard_i2c.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/mcc_generated_files/reset.o.d ${OBJECTDIR}/mcc_generated_files/system.o.d ${OBJECTDIR}/mcc_generated_files/clock.o.d ${OBJECTDIR}/mcc_generated_files/traps.o.d ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o.d ${OBJECTDIR}/mcc_generated_files/mcc.o.d ${OBJECTDIR}/mcc_generated_files/pin_manager.o.d ${OBJECTDIR}/mcc_generated_files/spi2.o.d ${OBJECTDIR}/mcc_generated_files/pwm.o.d ${OBJECTDIR}/mcc_generated_files/dma.o.d ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/lcd_i2c.o.d ${OBJECTDIR}/adxl355.o.d ${OBJECTDIR}/hard_i2c.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/mcc_generated_files/reset.o ${OBJECTDIR}/mcc_generated_files/system.o ${OBJECTDIR}/mcc_generated_files/clock.o ${OBJECTDIR}/mcc_generated_files/traps.o ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o ${OBJECTDIR}/mcc_generated_files/mcc.o ${OBJECTDIR}/mcc_generated_files/pin_manager.o ${OBJECTDIR}/mcc_generated_files/spi2.o ${OBJECTDIR}/mcc_generated_files/pwm.o ${OBJECTDIR}/mcc_generated_files/i2c1.o ${OBJECTDIR}/mcc_generated_files/dma.o ${OBJECTDIR}/mcc_generated_files/tmr2.o ${OBJECTDIR}/main.o ${OBJECTDIR}/lcd_i2c.o ${OBJECTDIR}/soft_i2c.o ${OBJECTDIR}/adxl355.o
+OBJECTFILES=${OBJECTDIR}/mcc_generated_files/reset.o ${OBJECTDIR}/mcc_generated_files/system.o ${OBJECTDIR}/mcc_generated_files/clock.o ${OBJECTDIR}/mcc_generated_files/traps.o ${OBJECTDIR}/mcc_generated_files/interrupt_manager.o ${OBJECTDIR}/mcc_generated_files/mcc.o ${OBJECTDIR}/mcc_generated_files/pin_manager.o ${OBJECTDIR}/mcc_generated_files/spi2.o ${OBJECTDIR}/mcc_generated_files/pwm.o ${OBJECTDIR}/mcc_generated_files/dma.o ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o ${OBJECTDIR}/main.o ${OBJECTDIR}/lcd_i2c.o ${OBJECTDIR}/adxl355.o ${OBJECTDIR}/hard_i2c.o
 
 # Source Files
-SOURCEFILES=mcc_generated_files/reset.c mcc_generated_files/system.c mcc_generated_files/clock.c mcc_generated_files/traps.c mcc_generated_files/interrupt_manager.c mcc_generated_files/mcc.c mcc_generated_files/pin_manager.c mcc_generated_files/spi2.c mcc_generated_files/pwm.c mcc_generated_files/i2c1.c mcc_generated_files/dma.c mcc_generated_files/tmr2.c main.c lcd_i2c.c soft_i2c.c adxl355.c
+SOURCEFILES=mcc_generated_files/reset.c mcc_generated_files/system.c mcc_generated_files/clock.c mcc_generated_files/traps.c mcc_generated_files/interrupt_manager.c mcc_generated_files/mcc.c mcc_generated_files/pin_manager.c mcc_generated_files/spi2.c mcc_generated_files/pwm.c mcc_generated_files/dma.c mcc_generated_files/i2c1_driver.c main.c lcd_i2c.c adxl355.c hard_i2c.c
 
 
 
@@ -149,23 +149,17 @@ ${OBJECTDIR}/mcc_generated_files/pwm.o: mcc_generated_files/pwm.c  .generated_fi
 	@${RM} ${OBJECTDIR}/mcc_generated_files/pwm.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/pwm.c  -o ${OBJECTDIR}/mcc_generated_files/pwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/pwm.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/mcc_generated_files/i2c1.o: mcc_generated_files/i2c1.c  .generated_files/flags/default/c0a24d4f3e863754e1b3dbc26704207787e807ab .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
-	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1.o.d 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/i2c1.c  -o ${OBJECTDIR}/mcc_generated_files/i2c1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/i2c1.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
-	
 ${OBJECTDIR}/mcc_generated_files/dma.o: mcc_generated_files/dma.c  .generated_files/flags/default/3ee1c1bb0c28bc546ce0abef2abe571905cb4e9a .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
 	@${RM} ${OBJECTDIR}/mcc_generated_files/dma.o.d 
 	@${RM} ${OBJECTDIR}/mcc_generated_files/dma.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/dma.c  -o ${OBJECTDIR}/mcc_generated_files/dma.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/dma.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/mcc_generated_files/tmr2.o: mcc_generated_files/tmr2.c  .generated_files/flags/default/b0f7d80ced80af8405f38fbbdc39a33221a4ec85 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
+${OBJECTDIR}/mcc_generated_files/i2c1_driver.o: mcc_generated_files/i2c1_driver.c  .generated_files/flags/default/44f6bfbfc73a3d2b5fb9b5262b750680cb1df85e .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/tmr2.o.d 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/tmr2.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/tmr2.c  -o ${OBJECTDIR}/mcc_generated_files/tmr2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/tmr2.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
+	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o.d 
+	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/i2c1_driver.c  -o ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/i2c1_driver.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
 ${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/2cf3837b0f738808f7fe898ad71f6a36ca5c2589 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}" 
@@ -179,17 +173,17 @@ ${OBJECTDIR}/lcd_i2c.o: lcd_i2c.c  .generated_files/flags/default/3b1187d9394b02
 	@${RM} ${OBJECTDIR}/lcd_i2c.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd_i2c.c  -o ${OBJECTDIR}/lcd_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/lcd_i2c.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/soft_i2c.o: soft_i2c.c  .generated_files/flags/default/6874be38d6c2dabf60412e74834a5b8d9a13e5ab .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/soft_i2c.o.d 
-	@${RM} ${OBJECTDIR}/soft_i2c.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  soft_i2c.c  -o ${OBJECTDIR}/soft_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/soft_i2c.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
-	
 ${OBJECTDIR}/adxl355.o: adxl355.c  .generated_files/flags/default/be48d983c19a058c1b7b98b9df7b89b319b44bcd .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/adxl355.o.d 
 	@${RM} ${OBJECTDIR}/adxl355.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  adxl355.c  -o ${OBJECTDIR}/adxl355.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/adxl355.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
+	
+${OBJECTDIR}/hard_i2c.o: hard_i2c.c  .generated_files/flags/default/a3b91a8b3ddde0aa16782156b9ed18e1ac8e4c71 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/hard_i2c.o.d 
+	@${RM} ${OBJECTDIR}/hard_i2c.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  hard_i2c.c  -o ${OBJECTDIR}/hard_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/hard_i2c.o.d"      -g -D__DEBUG   -mno-eds-warn  -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
 else
 ${OBJECTDIR}/mcc_generated_files/reset.o: mcc_generated_files/reset.c  .generated_files/flags/default/b94e6a9c60a2c41ce3273744e1e6910b73043318 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
@@ -246,23 +240,17 @@ ${OBJECTDIR}/mcc_generated_files/pwm.o: mcc_generated_files/pwm.c  .generated_fi
 	@${RM} ${OBJECTDIR}/mcc_generated_files/pwm.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/pwm.c  -o ${OBJECTDIR}/mcc_generated_files/pwm.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/pwm.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/mcc_generated_files/i2c1.o: mcc_generated_files/i2c1.c  .generated_files/flags/default/c6730bf0aa4848f681a517e5488fca6984264ec6 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
-	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1.o.d 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/i2c1.c  -o ${OBJECTDIR}/mcc_generated_files/i2c1.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/i2c1.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
-	
 ${OBJECTDIR}/mcc_generated_files/dma.o: mcc_generated_files/dma.c  .generated_files/flags/default/5937075bd652eb33ffb8baedbe055a8b2954e11c .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
 	@${RM} ${OBJECTDIR}/mcc_generated_files/dma.o.d 
 	@${RM} ${OBJECTDIR}/mcc_generated_files/dma.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/dma.c  -o ${OBJECTDIR}/mcc_generated_files/dma.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/dma.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/mcc_generated_files/tmr2.o: mcc_generated_files/tmr2.c  .generated_files/flags/default/89fcbd55d137e792678250310d484cd365a22a6a .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
+${OBJECTDIR}/mcc_generated_files/i2c1_driver.o: mcc_generated_files/i2c1_driver.c  .generated_files/flags/default/7cfdbb0ce8edc4b145d3014a3ec46dfee599993e .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}/mcc_generated_files" 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/tmr2.o.d 
-	@${RM} ${OBJECTDIR}/mcc_generated_files/tmr2.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/tmr2.c  -o ${OBJECTDIR}/mcc_generated_files/tmr2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/tmr2.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
+	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o.d 
+	@${RM} ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  mcc_generated_files/i2c1_driver.c  -o ${OBJECTDIR}/mcc_generated_files/i2c1_driver.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/mcc_generated_files/i2c1_driver.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
 ${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/20512b4a54ff401f5251aaec295ada60c2c6e20c .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}" 
@@ -276,17 +264,17 @@ ${OBJECTDIR}/lcd_i2c.o: lcd_i2c.c  .generated_files/flags/default/f11e16d290c4e9
 	@${RM} ${OBJECTDIR}/lcd_i2c.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd_i2c.c  -o ${OBJECTDIR}/lcd_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/lcd_i2c.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
-${OBJECTDIR}/soft_i2c.o: soft_i2c.c  .generated_files/flags/default/397a6a30963a13b779deba4c26eef08d32327bac .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/soft_i2c.o.d 
-	@${RM} ${OBJECTDIR}/soft_i2c.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  soft_i2c.c  -o ${OBJECTDIR}/soft_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/soft_i2c.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
-	
 ${OBJECTDIR}/adxl355.o: adxl355.c  .generated_files/flags/default/c4e9ea13a7534d2c82e18eaa255558c616317d1b .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/adxl355.o.d 
 	@${RM} ${OBJECTDIR}/adxl355.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  adxl355.c  -o ${OBJECTDIR}/adxl355.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/adxl355.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
+	
+${OBJECTDIR}/hard_i2c.o: hard_i2c.c  .generated_files/flags/default/1d55a970ea1f3c8486d9b536f92c17220c86f2c4 .generated_files/flags/default/1adc1961f672e5a04a49d58f8a6efc158617fb9c
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/hard_i2c.o.d 
+	@${RM} ${OBJECTDIR}/hard_i2c.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  hard_i2c.c  -o ${OBJECTDIR}/hard_i2c.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/hard_i2c.o.d"      -mno-eds-warn  -g -omf=elf -DXPRJ_default=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off   
 	
 endif
 

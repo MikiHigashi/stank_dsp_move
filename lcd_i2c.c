@@ -4,7 +4,7 @@
 
 #define FCY 69784687UL
 #include <libpic30.h>
-#include "soft_i2c.h"
+#include "hard_i2c.h"
 #include "lcd_i2c.h"
 #include "mcc_generated_files/mcc.h"
 

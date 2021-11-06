@@ -48,6 +48,7 @@
 #include "system_types.h"
 #include "interrupt_manager.h"
 #include "traps.h"
+#include "i2c1_driver.h"
 
 void SYSTEM_Initialize(void)
 {

@@ -1,4 +1,4 @@
-build/default/production/adxl355.o: adxl355.c hard_i2c.h adxl355.h \
+build/default/production/hard_i2c.o: hard_i2c.c hard_i2c.h \
  mcc_generated_files/mcc.h mcc_generated_files/reset.h \
  mcc_generated_files/reset_types.h mcc_generated_files/system.h \
  mcc_generated_files/system_types.h mcc_generated_files/clock.h \
@@ -7,8 +7,6 @@ build/default/production/adxl355.o: adxl355.c hard_i2c.h adxl355.h \
  mcc_generated_files/i2c1_driver.h mcc_generated_files/watchdog.h
 
 hard_i2c.h:
-
-adxl355.h:
 
 mcc_generated_files/mcc.h:
 
