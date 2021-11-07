@@ -418,19 +418,15 @@ int main(void)
     WATCHDOG_TimerClear();
     __delay_ms(100);    
     WATCHDOG_TimerClear();
-    while (LCD_i2c_init(8)) {
-        i2c1_driver_close();            
-        i2c1_driver_driver_open();
-        i2c1_driver_initSlaveHardware();
-    }
-    while (ADXL355_init(6)) {
-        i2c1_driver_close();            
-        i2c1_driver_driver_open();
-        i2c1_driver_initSlaveHardware();
-    }
+    LCD_i2c_init(8);
+    
+//    while (ADXL355_init(6)) {
+//        i2c1_driver_close();            
+//        i2c1_driver_driver_open();
+//        i2c1_driver_initSlaveHardware();
+//    }
     
     uint8_t can;
-uint16_t dc = 0;    
     data[0] = data[1] = data[2] = data[3] = 0;
     data[4] = data[5] = data[6] = data[7] = 0x80; // 停止
     motor = step_val[0] = step_val[1] = 128;
@@ -463,33 +459,22 @@ uint16_t dc = 0;
             neutral_position();
         }
         else {
-            signed long x = ADXL355_readAcc(ADXL355_ADR_X);
-            if (x == 9999999) {
-                i2c1_driver_close();            
-                i2c1_driver_driver_open();
-                i2c1_driver_initSlaveHardware();
-            }
-            else {
-                x >>= 10; // 事実上は符号だけ必要 >>12 標準だがそれは少し精度落ち
-                hosei += (signed short)x;
-                set_servo(cannon, hosei);
+//            signed long x = ADXL355_readAcc(ADXL355_ADR_X);
+//            if (x == 9999999) {
+//                i2c1_driver_close();            
+//                i2c1_driver_driver_open();
+//                i2c1_driver_initSlaveHardware();
+//            }
+//            else {
+//                x >>= 10; // 事実上は符号だけ必要 >>12 標準だがそれは少し精度落ち
+//                hosei += (signed short)x;
+//                set_servo(cannon, hosei);
 
-                if (LCD_i2C_cmd(0x80)) {
-                    i2c1_driver_close();            
-                    i2c1_driver_driver_open();
-                    i2c1_driver_initSlaveHardware();
-                }
-                else {
-                    sprintf(buf, "%6d %6d", dc++, (signed short)x);
-                    if (LCD_i2C_data(buf)) {
-                        i2c1_driver_close();            
-                        i2c1_driver_driver_open();
-                        i2c1_driver_initSlaveHardware();
-                    }
-                }
-            }
+                LCD_i2C_cmd(0x80);
+                LCD_i2C_data("ABC");
+//          }
         }
-        __delay_ms(20);
+        __delay_ms(1);
     }
     return 1; 
 }
