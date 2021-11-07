@@ -10,24 +10,25 @@
 
 
 // 表示クリアしDDRAMアドレス設定
-void LCD_clear_pos(unsigned char cmd) {
-    LCD_i2C_cmd(0x01); // クリアディスプレイ
+// 1:タイムアウト 0:正常
+int LCD_clear_pos(unsigned char cmd) {
+    if (LCD_i2C_cmd(0x01)) return 1; // クリアディスプレイ
     __delay_ms(1);
-    if (cmd == 0x80) return;
-    LCD_i2C_cmd(cmd);
+    if (cmd == 0x80) return 1;
+    return LCD_i2C_cmd(cmd);
 }
 
 
 // 文字列 str を表示する
-void LCD_i2C_data(char *str) {
+// 1:タイムアウト 0:正常
+int LCD_i2C_data(char *str) {
 	unsigned char c;
 	char l;
 	char i;
 
-	I2C_start();
-	I2C_send(LCD_dev_addr);	// スレーブアドレス
-	if  (I2C_ackchk()) {
-	}
+	if (I2C_start()) return 1;
+	if (I2C_send(LCD_dev_addr)) return 1;	// スレーブアドレス
+	if (I2C_ackchk() == 2) return 1;
 
 	l = strlen(str);
 	for (i=1; i<=l; i++) {
@@ -35,57 +36,55 @@ void LCD_i2C_data(char *str) {
 		if (i==l) {
 			c = 0x40;
 		}
-		I2C_send(c);
-		if  (I2C_ackchk()) {
-		}
+		if (I2C_send(c)) return 1;
+    	if (I2C_ackchk() == 2) return 1;
 
 		c = (unsigned char)(*(str++));
-		I2C_send(c);
-		if  (I2C_ackchk()) {
-		}
+		if (I2C_send(c)) return 1;
+    	if (I2C_ackchk() == 2) return 1;
 	}
 
-	I2C_stop();
+	return I2C_stop();
 }
 
 
 // ==================== I2C接続LCDにコマンド送信 ===========================
-void LCD_i2C_cmd(unsigned char cmd) {
-	I2C_start();
-	I2C_send(LCD_dev_addr);	// スレーブアドレス
-	if  (I2C_ackchk()) {
-	}
-	I2C_send(0);
-	if  (I2C_ackchk()) {
-	}
-	I2C_send(cmd);
-	if  (I2C_ackchk()) {
-	}
-	I2C_stop();
+// 1:タイムアウト 0:正常
+int LCD_i2C_cmd(unsigned char cmd) {
+	if (I2C_start()) return 1;
+	if (I2C_send(LCD_dev_addr)) return 1;	// スレーブアドレス
+	if (I2C_ackchk() == 2) return 1;
+	if (I2C_send(0)) return 1;
+	if (I2C_ackchk() == 2) return 1;
+	if (I2C_send(cmd)) return 1;
+	if (I2C_ackchk() == 2) return 1;
+	return I2C_stop();
 }
 
 
 // ==================== I2C接続LCDの初期化 ===========================
 // ctr=コントラスト 0 to 63
-void LCD_i2c_init(unsigned char ctr) {
+// 1:タイムアウト 0:正常
+int LCD_i2c_init(unsigned char ctr) {
     __delay_ms(40);
-    LCD_i2C_cmd(0x38);
+    if (LCD_i2C_cmd(0x38)) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x39);
+    if (LCD_i2C_cmd(0x39)) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x14);
+    if (LCD_i2C_cmd(0x14)) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x70 + (ctr & 0x0F));
+    if (LCD_i2C_cmd(0x70 + (ctr & 0x0F))) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x54 + (ctr >> 4));
+    if (LCD_i2C_cmd(0x54 + (ctr >> 4))) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x6C);
+    if (LCD_i2C_cmd(0x6C)) return 1;
     __delay_ms(200);
 
-    LCD_i2C_cmd(0x38);
+    if (LCD_i2C_cmd(0x38)) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x0C);
+    if (LCD_i2C_cmd(0x0C)) return 1;
     __delay_us(30);
-    LCD_i2C_cmd(0x01);
+    if (LCD_i2C_cmd(0x01)) return 1;
     __delay_ms(2);
+    return 0;
 }

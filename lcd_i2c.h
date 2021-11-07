@@ -18,10 +18,10 @@
 // I2C アドレス
 #define LCD_dev_addr 0x7C	// LCDアドレス
 
-void LCD_i2c_init(unsigned char ctr);
-void LCD_i2C_cmd(unsigned char cmd);
-void LCD_i2C_data(char *str);
-void LCD_clear_pos(unsigned char cmd);
+int LCD_i2c_init(unsigned char ctr);
+int LCD_i2C_cmd(unsigned char cmd);
+int LCD_i2C_data(char *str);
+int LCD_clear_pos(unsigned char cmd);
 
 
 #endif	//LCD_I2C_H

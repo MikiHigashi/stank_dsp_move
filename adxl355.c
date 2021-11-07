@@ -134,29 +134,37 @@ signed long ADXL355_readAcc(uint8_t addr) {
         };
     } v;
     
-    if (ADXL355_setadr(addr)) return 9999999;
+    uint8_t retry = 0;
+    for (retry=0; retry<5; retry++) {
+        if (ADXL355_setadr(addr)) return 9999999;
 
-	if (I2C_restart()) return 9999999;
-	if (I2C_send(ADXL355_dev_addr | 1)) return 9999999;
-	if (I2C_ackchk() == 2)  return 9999999;
+    	if (I2C_restart()) return 9999999;
+        if (I2C_send(ADXL355_dev_addr | 1)) return 9999999;
+        if (I2C_ackchk() == 2)  return 9999999;
 
-    // 加速度取得
-    uint16_t r;
-    r = I2C_rcv();
-    if (r == 256) return 9999999;
-    v.xH = (uint8_t)r;
-    if (I2C_acksnd()) return 9999999;
-    r = I2C_rcv();
-    if (r == 256) return 9999999;
-    v.xM = (uint8_t)r;
-    if (I2C_acksnd()) return 9999999;
-    r = I2C_rcv();
-    if (r == 256) return 9999999;
-    v.xL = (uint8_t)r;
-    if (I2C_nacksnd()) return 9999999;
-    if (I2C_stop()) return 9999999;
-    v.x >>= 12;
-    
-    return v.x;
+        // 加速度取得
+        uint16_t r;
+        r = I2C_rcv();
+        if (r == 256) return 9999999;
+        v.xH = (uint8_t)r;
+        if (I2C_acksnd()) return 9999999;
+        r = I2C_rcv();
+        if (r == 256) return 9999999;
+        v.xM = (uint8_t)r;
+        if (I2C_acksnd()) return 9999999;
+        r = I2C_rcv();
+        if (r == 256) return 9999999;
+        v.xL = (uint8_t)r;
+        if (I2C_nacksnd()) return 9999999;
+        if (I2C_stop()) return 9999999;
+
+        if (I2C1STATbits.BCL == 0) { // バス衝突無し
+            v.x >>= 12;
+            return v.x;
+        }
+        i2c1_driver_clearBusCollision();
+        __delay_ms(5);
+    }
+    return 9999999;
 }
 

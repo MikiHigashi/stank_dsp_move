@@ -184,9 +184,6 @@ ADXL355 a;
 
 char buf[32];
 
-extern uint8_t flg;
-
-
 
 // SPI受信
 void int_strb(void) {
@@ -421,7 +418,11 @@ int main(void)
     WATCHDOG_TimerClear();
     __delay_ms(100);    
     WATCHDOG_TimerClear();
-    LCD_i2c_init(8);
+    while (LCD_i2c_init(8)) {
+        i2c1_driver_close();            
+        i2c1_driver_driver_open();
+        i2c1_driver_initSlaveHardware();
+    }
     while (ADXL355_init(6)) {
         i2c1_driver_close();            
         i2c1_driver_driver_open();
@@ -473,12 +474,22 @@ uint16_t dc = 0;
                 hosei += (signed short)x;
                 set_servo(cannon, hosei);
 
-                LCD_i2C_cmd(0x80);
-                sprintf(buf, "%5d %3d %5d", dc++, flg, (signed short)x);
-                LCD_i2C_data(buf);
+                if (LCD_i2C_cmd(0x80)) {
+                    i2c1_driver_close();            
+                    i2c1_driver_driver_open();
+                    i2c1_driver_initSlaveHardware();
+                }
+                else {
+                    sprintf(buf, "%6d %6d", dc++, (signed short)x);
+                    if (LCD_i2C_data(buf)) {
+                        i2c1_driver_close();            
+                        i2c1_driver_driver_open();
+                        i2c1_driver_initSlaveHardware();
+                    }
+                }
             }
         }
-        __delay_ms(1);
+        __delay_ms(20);
     }
     return 1; 
 }

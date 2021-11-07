@@ -11,13 +11,13 @@
 #define TIMEOUT_CNT 300
 #define TIMEOUT_CNT_L 5000
 
-uint8_t flg = 0;
 
 int IdleI2C1(void)
 {
     uint16_t cnt = 0;
 	//while(I2C1CON1bits.SEN || I2C1CON1bits.PEN || I2C1CON1bits.RCEN || I2C1CON1bits.RSEN || I2C1CON1bits.ACKEN || I2C1STATbits.TRSTAT) {
-	while(I2C1CON1bits.SEN || I2C1CON1bits.PEN || I2C1CON1bits.RCEN || I2C1CON1bits.RSEN || I2C1CON1bits.ACKEN) {
+	//while(I2C1CON1bits.SEN || I2C1CON1bits.PEN || I2C1CON1bits.RCEN || I2C1CON1bits.RSEN || I2C1CON1bits.ACKEN) {
+	while(I2C1CON1bits.SEN || I2C1CON1bits.PEN || I2C1CON1bits.RCEN || I2C1CON1bits.RSEN || I2C1CON1bits.ACKEN || I2C1STATbits.S) {
         cnt ++;
         if (cnt>=TIMEOUT_CNT_L) {
             i2c1_driver_close();            
