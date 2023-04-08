@@ -6,7 +6,31 @@
 #include <string.h>
 #include "hard_i2c.h"
 #include "lcd_i2c.h"
-#include "adxl355.h"
+#include "wt901.h"
+
+
+typedef union tagHL16 {
+    signed short SHL;
+    uint16_t HL;
+    struct {
+        uint8_t L;
+        uint8_t H;
+    };
+    struct {
+        unsigned :8;
+        unsigned :7;
+        unsigned T:1;
+    };
+} HL16;
+
+
+typedef union tagHL32 {
+    uint32_t HL;
+    struct {
+        signed short L;
+        signed short H;
+    };
+} HL32;
 
 
 // PWM 送信パッケージ
@@ -16,150 +40,167 @@ typedef union tagPWM4 {
 } PWM4;
 
 
+// Allocate and reserve a page of flash for this test to use.  The compiler/linker will reserve this for data and not place any code here.
+static __prog__  uint8_t flashTestPage[FLASH_ERASE_PAGE_SIZE_IN_PC_UNITS] __attribute__((space(prog),aligned(FLASH_ERASE_PAGE_SIZE_IN_PC_UNITS)));
+
+// We have detected a flash hardware error of some type.
+static void FlashError()
+{
+    while (1) 
+    { }
+}
+
+static void MiscompareError()
+{
+    while (1) 
+    { }
+}
+
+
 uint16_t table_pwm[] = {
-	20,
+	10,
+	11,
+	12,
+	13,
+	15,
+	16,
+	18,
+	19,
 	21,
-	22,
-	22,
-	23,
 	24,
-	25,
 	26,
-	27,
-	28,
 	29,
-	30,
-	32,
-	33,
-	34,
+	31,
 	35,
-	37,
 	38,
-	40,
-	41,
-	43,
-	45,
+	42,
 	46,
-	48,
-	50,
-	52,
-	54,
+	51,
 	56,
-	58,
 	61,
-	63,
-	65,
-	68,
-	71,
-	73,
-	76,
-	79,
-	82,
-	85,
-	89,
-	92,
-	96,
-	100,
-	103,
-	107,
-	112,
-	116,
-	120,
-	125,
-	130,
-	135,
-	140,
-	146,
-	151,
-	157,
-	163,
-	170,
-	176,
-	183,
-	190,
-	198,
-	206,
-	214,
-	222,
-	231,
-	240,
-	249,
-	259,
-	269,
-	279,
-	290,
-	301,
-	313,
-	325,
-	338,
-	351,
-	365,
+	67,
+	74,
+	81,
+	90,
+	98,
+	108,
+	119,
+	131,
+	144,
+	159,
+	174,
+	192,
+	211,
+	267,
+	323,
 	379,
-	394,
-	409,
-	425,
-	441,
-	459,
-	476,
-	495,
-	514,
-	534,
-	555,
-	577,
-	599,
-	623,
-	647,
-	672,
-	698,
-	725,
-	754,
-	783,
-	813,
-	845,
-	878,
-	912,
-	948,
-	985,
-	1023,
-	1063,
-	1104,
-	1147,
-	1192,
-	1238,
-	1286,
-	1337,
-	1389,
-	1443,
-	1499,
-	1557,
-	1618,
-	1681,
-	1746,
-	1814,
-	1885,
-	1958,
-	2035,
-	2114,
-	2196,
-	2282,
-	2370,
-	2463,
-	2559,
-	2559
+	435,
+	491,
+	546,
+	602,
+	658,
+	714,
+	770,
+	826,
+	882,
+	938,
+	994,
+	1050,
+	1106,
+	1161,
+	1217,
+	1273,
+	1329,
+	1385,
+	1441,
+	1497,
+	1553,
+	1609,
+	1665,
+	1720,
+	1776,
+	1832,
+	1888,
+	1944,
+	2000,
+	2312,
+	2625,
+	2938,
+	3250,
+	3562,
+	3875,
+	4188,
+	4500,
+	4812,
+	5125,
+	5438,
+	5750,
+	6062,
+	6375,
+	6688,
+	7000,
+	7312,
+	7625,
+	7938,
+	8250,
+	8562,
+	8875,
+	9188,
+	9500,
+	9812,
+	10125,
+	10438,
+	10750,
+	11062,
+	11375,
+	11688,
+	12000,
+	12312,
+	12625,
+	12938,
+	13250,
+	13562,
+	13875,
+	14188,
+	14500,
+	14812,
+	15125,
+	15438,
+	15750,
+	16062,
+	16375,
+	16688,
+	17000,
+	17312,
+	17625,
+	17938,
+	18250,
+	18562,
+	18875,
+	19188,
+	19500,
+	19812,
+	20125,
+	20438,
+	20750,
+	21062,
+	21375,
+	21688,
+	21688
 };            
 
 
 #define CENT1 13000 /* data2.pwm[3] +で突っ張る */
-#define CENT2 12000 /* data2.pwm[2] -で突っ張る */
-#define CENT3 12000 /* data1.pwm[0] +で突っ張る */
-#define CENT4 11500 /* data1.pwm[1] -で突っ張る */
-#define CENT5 12000 /* data1.pwm[3] +で突っ張る */
-#define CENT6 13000 /* data1.pwm[2] -で突っ張る */
+#define CENT2 13000 /* data2.pwm[2] -で突っ張る */
+#define CENT3 13000 /* data1.pwm[0] +で突っ張る */
+#define CENT4 12000 /* data1.pwm[1] -で突っ張る */
+#define CENT5 11500 /* data1.pwm[2] +で突っ張る */
+#define CENT6 10000 /* data1.pwm[3] -で突っ張る */
 #define CENT7 11000 /* data2.pwm[1] +で突っ張る */
-#define CENT8 12000 /* data2.pwm[0] -で突っ張る */
+#define CENT8 13000 /* data2.pwm[0] -で突っ張る */
 // 車体重量が増えるとこの補正値を大きくする
 // 上記調整値より256倍大きいスケールで値を定義する
-#define CENT_WEIGHT (0L*256)
+#define CENT_WEIGHT (2000L*256)
 #define CENT1L (256L * CENT1)
 #define CENT2L (256L * CENT2)
 #define CENT3L (256L * CENT3)
@@ -174,15 +215,118 @@ uint16_t table_pwm[] = {
 PWM4 data1, data2; // SPI送信するデーター
 uint8_t motor; // SPI送信するデーター
 uint8_t step_val[2]; // ステッピングモーター値
-signed short hosei = 0; // 補正量
+signed short height = 0; // 車高補正量
+signed short hosei = 0; // 左右傾斜補正量
+signed long hosei2 = 0; // 俯仰補正量
 signed long cannon = 0; // 仰角
 
 #define SPI_BYTES 8 /* SPI受信するデーターのバイト数 */
 uint8_t data[SPI_BYTES]; // SPI受信格納先
 
-ADXL355 a;
+#define TIMEOUT 300 /* UART受信タイムアウト */
 
 char buf[32];
+
+// キャリブレーション値
+signed short roll0 = (-382);
+signed short pitch0 = (-552);
+
+// Angle
+signed short roll = 0;
+signed short pitch = 0;
+// Angular Velocity
+signed short wx = 0;
+signed short wy = 0;
+
+
+
+/////////////////////////////////////////
+// キャリブレーション保存
+// 失敗したら0以外を返す
+/////////////////////////////////////////
+char save_calibration() {
+    uint32_t flash_storage_address;
+    bool result;
+    uint32_t write_data[2];
+    uint32_t read_data[2];
+
+    HL32 d;
+    
+    // Get flash page aligned address of flash reserved above for this test.
+    flash_storage_address = FLASH_GetErasePageAddress((uint32_t)&flashTestPage[0]);
+
+    FLASH_Unlock(FLASH_UNLOCK_KEY);
+
+    result = FLASH_ErasePage(flash_storage_address);
+    if (result == false) {
+        FlashError();
+        return 1;
+    }
+    
+    // Fill first 4 flash words with data
+    // For this product we must write two adjacent words at a one time.
+    d.H = roll0;
+    d.L = pitch0;
+    write_data[0] = d.HL;
+    write_data[1] = d.HL;
+
+    // For this product we must write two adjacent words at a one time.
+    result  = FLASH_WriteDoubleWord24(flash_storage_address,   write_data[0], write_data[1]);
+    if (result == false) {
+        FlashError();
+        return 1;
+    }
+
+    // Clear Key for NVM Commands so accidental call to flash routines will not corrupt flash
+    FLASH_Lock();
+    
+    // read the flash words to verify the data
+    read_data[0] = FLASH_ReadWord24(flash_storage_address);
+    read_data[1] = FLASH_ReadWord24(flash_storage_address + 2);
+
+    // Stop if the read data does not match the write data;
+    if ( (write_data[0] != read_data[0]) ||
+         (write_data[1] != read_data[1]) )
+    {
+        MiscompareError();    
+        return 1;
+    }
+    
+    return 0;
+}
+
+
+/////////////////////////////////////////
+// キャリブレーション取得
+// キャリブレーションが必要なら0以外を返す
+/////////////////////////////////////////
+char get_calibration() {
+    uint32_t flash_storage_address;
+    HL32 d;
+    
+    // Get flash page aligned address of flash reserved above for this test.
+    flash_storage_address = FLASH_GetErasePageAddress((uint32_t)&flashTestPage[0]);
+    
+    d.HL = FLASH_ReadWord24(flash_storage_address);
+    roll0 = d.H;
+    pitch0 = d.L;
+    return 0;
+}
+
+
+// 受信データー確認
+// 受信あれば1 なければ0 を返す
+char check_rsv(void) {
+    uint8_t n = get_rsv_size1();
+    if (n < 4) {
+        return 0; // 受信データーが少な過ぎる
+    }
+    n = get_rsv_size2();
+    if (n < 4) {
+        return 0; // 受信データーが少な過ぎる
+    }
+    return 1;
+}
 
 
 // SPI受信
@@ -270,8 +414,8 @@ void spi_send(void) {
 void waiting_position(void) {
     data1.pwm[0] = 4000;
     data1.pwm[1] = 20000;
-    data1.pwm[2] = 20000;
-    data1.pwm[3] = 4000;
+    data1.pwm[2] = 4000;
+    data1.pwm[3] = 20000;
     data2.pwm[0] = 20000;
     data2.pwm[1] = 4000;
     data2.pwm[2] = 20000;
@@ -282,8 +426,11 @@ void waiting_position(void) {
 
 // サーボに値をセット
 // c: 水平を0とし、仰角は＋ 俯角は－
-// h1: 補正量
-void set_servo(signed long c, signed short h1) {
+// h1: 左右傾斜補正量
+// h2: 車高補正量
+// h3: 俯仰補正量
+void set_servo(signed long c, signed short h1, signed short h2, signed long h3) {
+    c += h3;
     signed long c3 = (c / 3);
     
     // 最前転輪
@@ -299,14 +446,17 @@ void set_servo(signed long c, signed short h1) {
     signed long s4 = (-c);
     signed long s5 = s4;
 
-    s1 = (CENT1L + CENT_WEIGHT) + s1;
-    s2 = (CENT2L - CENT_WEIGHT) - s2;
-    s3 = (CENT3L + CENT_WEIGHT) + s3;
-    s4 = (CENT4L - CENT_WEIGHT) - s4;
-    s5 = (CENT5L + CENT_WEIGHT) + s5;
-    s6 = (CENT6L - CENT_WEIGHT) - s6;
-    s7 = (CENT7L + CENT_WEIGHT) + s7;
-    s8 = (CENT8L - CENT_WEIGHT) - s8;
+    signed long cw = CENT_WEIGHT;
+    cw += (256L * h2);
+   
+    s1 = (CENT1L + cw) + s1;
+    s2 = (CENT2L - cw) - s2;
+    s3 = (CENT3L + cw) + s3;
+    s4 = (CENT4L - cw) - s4;
+    s5 = (CENT5L + cw) + s5;
+    s6 = (CENT6L - cw) - s6;
+    s7 = (CENT7L + cw) + s7;
+    s8 = (CENT8L - cw) - s8;
     
     if (s1 < 0) { s1 = 0; }
     if (s2 < 0) { s2 = 0; }
@@ -329,20 +479,21 @@ void set_servo(signed long c, signed short h1) {
     uint16_t mh, w;
     if (h1 >= 0) { // 車体が右下がり
         // 最大補正可能量を計算
-        mh = (u1 - 4000);
-        w = (20000 - u2);
+        mh = (u1 - 3000);
+        w = (21000 - u2);
         if (w < mh) mh = w;
-        w = (u3 - 4000);
+        w = (u3 - 3000);
         if (w < mh) mh = w;
-        w = (20000 - u4);
+        w = (21000 - u4);
         if (w < mh) mh = w;
-        w = (20000 - u5);
+
+        w = (21000 - u5);
         if (w < mh) mh = w;
-        w = (u6 - 4000);
+        w = (u6 - 3000);
         if (w < mh) mh = w;
-        w = (20000 - u7);
+        w = (21000 - u7);
         if (w < mh) mh = w;
-        w = (u8 - 4000);
+        w = (u8 - 3000);
         if (w < mh) mh = w;
         if (h1 > mh) h1 = mh;
         
@@ -359,20 +510,21 @@ void set_servo(signed long c, signed short h1) {
     else { // 車体が右上がり
         h1 = (-h1);
         // 最大補正可能量を計算
-        mh = (20000 - u1);
-        w = (u2 - 4000);
+        mh = (21000 - u1);
+        w = (u2 - 3000);
         if (w < mh) mh = w;
-        w = (20000 - u3);
+        w = (21000 - u3);
         if (w < mh) mh = w;
-        w = (u4 - 4000);
+        w = (u4 - 3000);
         if (w < mh) mh = w;
-        w = (u5 - 4000);
+
+        w = (u5 - 3000);
         if (w < mh) mh = w;
-        w = (20000 - u6);
+        w = (21000 - u6);
         if (w < mh) mh = w;
-        w = (u7 - 4000);
+        w = (u7 - 3000);
         if (w < mh) mh = w;
-        w = (20000 - u8);
+        w = (21000 - u8);
         if (w < mh) mh = w;
         if (h1 > mh) h1 = mh;
 
@@ -389,8 +541,8 @@ void set_servo(signed long c, signed short h1) {
 
     data1.pwm[0] = u3;
     data1.pwm[1] = u4;
-    data1.pwm[2] = u6;
-    data1.pwm[3] = u5;
+    data1.pwm[2] = u5;
+    data1.pwm[3] = u6;
     data2.pwm[0] = u8;
     data2.pwm[1] = u7;
     data2.pwm[2] = u2;
@@ -399,82 +551,204 @@ void set_servo(signed long c, signed short h1) {
 }
 
 
-// サーボを中立位置にする
-void neutral_position(void) {
-    set_servo(0, 0);
+// 俯仰を中立位置にする
+void neutral_position(signed long x512) {
+    hosei2 = 0;
+    set_servo(cannon, hosei, height, hosei2);
+}
+
+
+// 車高を中立位置にする
+void neutral_height(void) {
+    height = 0;
+    set_servo(cannon, hosei, height, hosei2);
 }
 
 
 int main(void)
 {
+    uint8_t btn1s = 0; // ボタンが連続で押された回数
+    uint8_t btn0s = 0; // ボタンが連続で押されていない回数
+    
     // initialize the device
     SYSTEM_Initialize();
+    set_rsv_buf((uint8_t *)&wx, 4, (uint8_t *)&roll, 4);
+    UART1_SetRxInterruptHandler(WT901_rsv_int);
+
     CN_SetInterruptHandler(int_strb);
     i2c1_driver_driver_open();
     i2c1_driver_initSlaveHardware();
 
-    neutral_position();
+    neutral_position(0);
     
     WATCHDOG_TimerClear();
     __delay_ms(100);    
     WATCHDOG_TimerClear();
     LCD_i2c_init(8);
-    
-//    while (ADXL355_init(6)) {
-//        i2c1_driver_close();            
-//        i2c1_driver_driver_open();
-//        i2c1_driver_initSlaveHardware();
-//    }
-    
+    //get_calibration();    
+
+    uint8_t nocon = 0; // ノーコン連続回数
     uint8_t can;
     data[0] = data[1] = data[2] = data[3] = 0;
     data[4] = data[5] = data[6] = data[7] = 0x80; // 停止
     motor = step_val[0] = step_val[1] = 128;
-    
+
     while (1)
     {
         WATCHDOG_TimerClear();
 
-        motor = step_val[0] = data[4];
-        step_val[1] = data[6];
+        uint16_t t;
+        for (t=0; t<TIMEOUT; t++) {
+            if (check_rsv()) {
+                break;
+            }
+            __delay_ms(1);
+        }
+        clear_rsv_size();
 
+        signed long x2 = (signed long)(roll - roll0 + wx);
+        signed long x512 = (x2 * 512);
+        signed long hosei2d = (cannon - x512) / 8;
+        if (hosei2d > 100000) {
+            hosei2d = 100000;
+        }
+        if (hosei2d < (-100000)) {
+            hosei2d = (-100000);
+        }
+
+
+    LCD_i2C_cmd(0x80);
+    sprintf(buf, "%7d %7d", (signed short)(cannon / 100), (signed short)(x512 / 100));
+    LCD_i2C_data(buf);
+    LCD_i2C_cmd(0xC0);
+    sprintf(buf, "%7d %7d", (signed short)(hosei2d / 100), (signed short)(hosei2 / 100));
+    LCD_i2C_data(buf);
+    
+    
+
+
+
+        
+        if ((data[0] & 1) == 0) { // 通信エラーもしくはノーコン
+            motor = step_val[0] = 128;
+            step_val[1] = 128;
+        }
+        else {
+            motor = step_val[0] = data[4];
+            step_val[1] = data[6];
+        }
+        
         can = data[7];
         if (can > 128) { // ↑に
             cannon += table_pwm[can - 128];
-            if (cannon > 1536000) {
-                cannon = 1536000;
+            if (cannon > (x512 + 100000)) {
+                cannon = (x512 + 100000);
             }
         }
         if (can < 128) { // ↓に
             cannon -= table_pwm[128 - can];
-            if (cannon < (-1536000)) {
-                cannon = (-1536000);
+            if (cannon < (x512 - 100000)) {
+                cannon = (x512 - 100000);
             }
         }
 
-        if ((data[0] & 12) && (data[1] & 12)) { // 左右の下トリムを同時押し
-            waiting_position(); // サスアーム収納ポジション
-        }
-        else if (data[1] & 3) {
-            neutral_position();
+        if ((data[0] & 1) == 0) { // 通信エラーもしくはノーコン
+            if (nocon < 255) nocon ++;
         }
         else {
-//            signed long x = ADXL355_readAcc(ADXL355_ADR_X);
-//            if (x == 9999999) {
-//                i2c1_driver_close();            
-//                i2c1_driver_driver_open();
-//                i2c1_driver_initSlaveHardware();
-//            }
-//            else {
-//                x >>= 10; // 事実上は符号だけ必要 >>12 標準だがそれは少し精度落ち
-//                hosei += (signed short)x;
-//                set_servo(cannon, hosei);
-
-                LCD_i2C_cmd(0x80);
-                LCD_i2C_data("ABC");
-//          }
+            nocon = 0;
+        }        
+        
+        if (nocon > 100) { // 通信エラーもしくはノーコンが続いている
+            waiting_position(); // サスアーム収納ポジション
         }
-        __delay_ms(1);
+        else if (data[1] & 3) { // 左UDボタンを押す
+            neutral_position(x512); // 俯仰水平に
+        }
+        else if (data[0] & 12) { // 右LRボタンを押す
+            neutral_height(); // 車高中立に
+        }
+        else {
+            //HL16 x16;
+            //x16.L = data[2];
+            //x16.H = data[3];
+            //signed short x = x16.SHL;
+            signed short x = (pitch - pitch0 + wy);
+            x >>= 1;
+            signed short y = data[5];
+            y -= 128;
+            height += y;
+            if (y > 112) {
+                height = 0;
+            }
+            if (height < -8000) {
+                height = -8000;
+            }
+            if (height > 1000) {
+                height = 1000;
+            }
+            hosei += x;
+
+            hosei2 += hosei2d;
+            if (motor > 135) { // あるていど前進
+                height = 0; // 車高を戻す
+            }
+            set_servo(cannon, hosei, height, hosei2);
+        }
+        if (hosei > 10000) {
+            hosei = 10000;
+        }
+        if (hosei < (-10000)) {
+            hosei = (-10000);
+        }
+        if (hosei2 > 1536000) {
+            hosei2 = 1536000;
+        }
+        if (hosei2 < (-1536000)) {
+            hosei2 = (-1536000);
+        }
+
+        __delay_ms(10);
+
+        if (BUTTON1_GetValue() == 0) { // ボタンが押されている
+            btn0s = 0;
+            if (btn1s < 255) {
+                btn1s ++;
+            }
+        }
+        else {
+            btn1s = 0;
+            if (btn0s < 255) {
+                btn0s ++;
+            }
+        }
+
+        //if (btn1s >= 10) {
+        if (0) {
+            // キャリブレーション実行
+            signed long rolls = 0;
+            signed long pitchs = 0;
+            for (t=0; t<100; t++) {
+                LCD_i2C_cmd(0x80);
+                sprintf(buf, "START CAL.%3d", t);
+                LCD_i2C_data(buf);
+
+                rolls += (signed long)roll;
+                pitchs += (signed long)pitch;
+                __delay_ms(15);
+            }
+            roll0 = (signed short)(rolls / 100);
+            pitch0 = (signed short)(pitchs / 100);
+            //save_calibration();
+
+            LCD_i2C_cmd(0x80);
+            sprintf(buf, "END CAL.      ");
+            LCD_i2C_data(buf);
+            LCD_i2C_cmd(0xC0);
+            sprintf(buf, "%8d%8d", roll0, pitch0);
+            LCD_i2C_data(buf);
+            while (1) ;
+        }
     }
     return 1; 
 }
