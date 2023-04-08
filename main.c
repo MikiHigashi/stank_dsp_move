@@ -429,8 +429,18 @@ void waiting_position(void) {
 // h1: 左右傾斜補正量
 // h2: 車高補正量
 // h3: 俯仰補正量
-void set_servo(signed long c, signed short h1, signed short h2, signed long h3) {
+// return h3 の修正後
+signed long set_servo(signed long c, signed short h1, signed short h2, signed long h3) {
+    signed long ret1 = h3;
     c += h3;
+    if (c > 1536000) {
+        c = 1536000;
+        //ret1 = 1536000 - c;
+    }
+    if (c < (-1536000)) {
+        c = (-1536000);
+        //ret1 = (-1536000) - c;
+    }
     signed long c3 = (c / 3);
     
     // 最前転輪
@@ -445,55 +455,43 @@ void set_servo(signed long c, signed short h1, signed short h2, signed long h3) 
     // 最後転輪
     signed long s4 = (-c);
     signed long s5 = s4;
-
-    signed long cw = CENT_WEIGHT;
-    cw += (256L * h2);
    
-    s1 = (CENT1L + cw) + s1;
-    s2 = (CENT2L - cw) - s2;
-    s3 = (CENT3L + cw) + s3;
-    s4 = (CENT4L - cw) - s4;
-    s5 = (CENT5L + cw) + s5;
-    s6 = (CENT6L - cw) - s6;
-    s7 = (CENT7L + cw) + s7;
-    s8 = (CENT8L - cw) - s8;
-    
-    if (s1 < 0) { s1 = 0; }
-    if (s2 < 0) { s2 = 0; }
-    if (s3 < 0) { s3 = 0; }
-    if (s4 < 0) { s4 = 0; }
-    if (s5 < 0) { s5 = 0; }
-    if (s6 < 0) { s6 = 0; }
-    if (s7 < 0) { s7 = 0; }
-    if (s8 < 0) { s8 = 0; }
+    s1 = (CENT1L + CENT_WEIGHT) + s1;
+    s2 = (CENT2L - CENT_WEIGHT) - s2;
+    s3 = (CENT3L + CENT_WEIGHT) + s3;
+    s4 = (CENT4L - CENT_WEIGHT) - s4;
+    s5 = (CENT5L + CENT_WEIGHT) + s5;
+    s6 = (CENT6L - CENT_WEIGHT) - s6;
+    s7 = (CENT7L + CENT_WEIGHT) + s7;
+    s8 = (CENT8L - CENT_WEIGHT) - s8;
 
-    uint16_t u1 = (uint16_t)(s1 >> 8);
-    uint16_t u2 = (uint16_t)(s2 >> 8);
-    uint16_t u3 = (uint16_t)(s3 >> 8);
-    uint16_t u4 = (uint16_t)(s4 >> 8);
-    uint16_t u5 = (uint16_t)(s5 >> 8);
-    uint16_t u6 = (uint16_t)(s6 >> 8);
-    uint16_t u7 = (uint16_t)(s7 >> 8);
-    uint16_t u8 = (uint16_t)(s8 >> 8);
+    signed short u1 = (signed short)(s1 >> 8);
+    signed short u2 = (signed short)(s2 >> 8);
+    signed short u3 = (signed short)(s3 >> 8);
+    signed short u4 = (signed short)(s4 >> 8);
+    signed short u5 = (signed short)(s5 >> 8);
+    signed short u6 = (signed short)(s6 >> 8);
+    signed short u7 = (signed short)(s7 >> 8);
+    signed short u8 = (signed short)(s8 >> 8);
 
-    uint16_t mh, w;
+    signed short mh, w;
     if (h1 >= 0) { // 車体が右下がり
         // 最大補正可能量を計算
-        mh = (u1 - 3000);
-        w = (21000 - u2);
+        mh = (u1 - 4000);
+        w = (20000 - u2);
         if (w < mh) mh = w;
-        w = (u3 - 3000);
+        w = (u3 - 4000);
         if (w < mh) mh = w;
-        w = (21000 - u4);
+        w = (20000 - u4);
         if (w < mh) mh = w;
 
-        w = (21000 - u5);
+        w = (20000 - u5);
         if (w < mh) mh = w;
-        w = (u6 - 3000);
+        w = (u6 - 4000);
         if (w < mh) mh = w;
-        w = (21000 - u7);
+        w = (20000 - u7);
         if (w < mh) mh = w;
-        w = (u8 - 3000);
+        w = (u8 - 4000);
         if (w < mh) mh = w;
         if (h1 > mh) h1 = mh;
         
@@ -510,21 +508,21 @@ void set_servo(signed long c, signed short h1, signed short h2, signed long h3) 
     else { // 車体が右上がり
         h1 = (-h1);
         // 最大補正可能量を計算
-        mh = (21000 - u1);
-        w = (u2 - 3000);
+        mh = (20000 - u1);
+        w = (u2 - 4000);
         if (w < mh) mh = w;
-        w = (21000 - u3);
+        w = (20000 - u3);
         if (w < mh) mh = w;
-        w = (u4 - 3000);
+        w = (u4 - 4000);
         if (w < mh) mh = w;
 
-        w = (u5 - 3000);
+        w = (u5 - 4000);
         if (w < mh) mh = w;
-        w = (21000 - u6);
+        w = (20000 - u6);
         if (w < mh) mh = w;
-        w = (u7 - 3000);
+        w = (u7 - 4000);
         if (w < mh) mh = w;
-        w = (21000 - u8);
+        w = (20000 - u8);
         if (w < mh) mh = w;
         if (h1 > mh) h1 = mh;
 
@@ -539,29 +537,74 @@ void set_servo(signed long c, signed short h1, signed short h2, signed long h3) 
         u8 += h1;
     }
 
-    data1.pwm[0] = u3;
-    data1.pwm[1] = u4;
-    data1.pwm[2] = u5;
-    data1.pwm[3] = u6;
-    data2.pwm[0] = u8;
-    data2.pwm[1] = u7;
-    data2.pwm[2] = u2;
-    data2.pwm[3] = u1;
+    // 車高調整可能範囲を計算
+    signed short min_h2 = (4000 - u1);
+    signed short max_h2 = (22000 - u1);
+    signed short min1 = (4000 - u3);
+    signed short max1 = (22000 - u3);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (4000 - u5);
+    max1 = (22000 - u5);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (4000 - u7);
+    max1 = (22000 - u7);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (u2 - 20000);
+    max1 = (u2 - 2000);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (u4 - 20000);
+    max1 = (u4 - 2000);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (u6 - 20000);
+    max1 = (u6 - 2000);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    min1 = (u8 - 20000);
+    max1 = (u8 - 2000);
+    if (min1 > min_h2) { min_h2 = min1; }
+    if (max1 < max_h2) { max_h2 = max1; }
+    if (h2 < min_h2) { h2 = min_h2; }
+    if (h2 > max_h2) { h2 = max_h2; }
+
+    // 車高調整
+    u1 += h2; // 4000 to 22000
+    u2 -= h2; // 2000 to 20000
+    u3 += h2; // 4000 to 22000
+    u4 -= h2; // 2000 to 20000
+    u5 += h2; // 4000 to 22000
+    u6 -= h2; // 2000 to 20000
+    u7 += h2; // 4000 to 22000
+    u8 -= h2; // 2000 to 20000
+
+    data1.pwm[0] = (uint16_t)u3;  // min 4000
+    data1.pwm[1] = (uint16_t)u4; // max 20000
+    data1.pwm[2] = (uint16_t)u5;  // min 4000
+    data1.pwm[3] = (uint16_t)u6; // max 20000
+    data2.pwm[0] = (uint16_t)u8; // max 20000
+    data2.pwm[1] = (uint16_t)u7;  // min 4000
+    data2.pwm[2] = (uint16_t)u2; // max 20000
+    data2.pwm[3] = (uint16_t)u1;  // min 4000
     spi_send();
+
+    return ret1;
 }
 
 
 // 俯仰を中立位置にする
 void neutral_position(signed long x512) {
-    hosei2 = 0;
-    set_servo(cannon, hosei, height, hosei2);
+    hosei2 = set_servo(cannon, hosei, height, 0);
 }
 
 
 // 車高を中立位置にする
 void neutral_height(void) {
     height = 0;
-    set_servo(cannon, hosei, height, hosei2);
+    hosei2 = set_servo(cannon, hosei, height, hosei2);
 }
 
 
@@ -615,19 +658,6 @@ int main(void)
         if (hosei2d < (-100000)) {
             hosei2d = (-100000);
         }
-
-
-    LCD_i2C_cmd(0x80);
-    sprintf(buf, "%7d %7d", (signed short)(cannon / 100), (signed short)(x512 / 100));
-    LCD_i2C_data(buf);
-    LCD_i2C_cmd(0xC0);
-    sprintf(buf, "%7d %7d", (signed short)(hosei2d / 100), (signed short)(hosei2 / 100));
-    LCD_i2C_data(buf);
-    
-    
-
-
-
         
         if ((data[0] & 1) == 0) { // 通信エラーもしくはノーコン
             motor = step_val[0] = 128;
@@ -684,16 +714,13 @@ int main(void)
             if (height < -8000) {
                 height = -8000;
             }
-            if (height > 1000) {
-                height = 1000;
+            if (height > 2000) {
+                height = 2000;
             }
             hosei += x;
 
             hosei2 += hosei2d;
-            if (motor > 135) { // あるていど前進
-                height = 0; // 車高を戻す
-            }
-            set_servo(cannon, hosei, height, hosei2);
+            hosei2 = set_servo(cannon, hosei, height, hosei2);
         }
         if (hosei > 10000) {
             hosei = 10000;
