@@ -53,10 +53,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "reset.h"
+#include "watchdog.h"
 #include "interrupt_manager.h"
 #include "traps.h"
+#include "memory/flash.h"
+#include "uart1.h"
 #include "i2c1_driver.h"
-#include "watchdog.h"
 
 #ifndef _XTAL_FREQ
 #define _XTAL_FREQ  139569375UL

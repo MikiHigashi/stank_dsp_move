@@ -1078,298 +1078,6 @@
 #define SPI_DATA2_SetDigitalOutput() (_TRISB1 = 0)
 /**
   @Summary
-    Sets the GPIO pin, RB10, high using LATB10.
-
-  @Description
-    Sets the GPIO pin, RB10, high using LATB10.
-
-  @Preconditions
-    The RB10 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Set RB10 high (1)
-    IO_RB10_SetHigh();
-    </code>
-
-*/
-#define IO_RB10_SetHigh()          (_LATB10 = 1)
-/**
-  @Summary
-    Sets the GPIO pin, RB10, low using LATB10.
-
-  @Description
-    Sets the GPIO pin, RB10, low using LATB10.
-
-  @Preconditions
-    The RB10 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Set RB10 low (0)
-    IO_RB10_SetLow();
-    </code>
-
-*/
-#define IO_RB10_SetLow()           (_LATB10 = 0)
-/**
-  @Summary
-    Toggles the GPIO pin, RB10, using LATB10.
-
-  @Description
-    Toggles the GPIO pin, RB10, using LATB10.
-
-  @Preconditions
-    The RB10 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Toggle RB10
-    IO_RB10_Toggle();
-    </code>
-
-*/
-#define IO_RB10_Toggle()           (_LATB10 ^= 1)
-/**
-  @Summary
-    Reads the value of the GPIO pin, RB10.
-
-  @Description
-    Reads the value of the GPIO pin, RB10.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    uint16_t portValue;
-
-    // Read RB10
-    postValue = IO_RB10_GetValue();
-    </code>
-
-*/
-#define IO_RB10_GetValue()         _RB10
-/**
-  @Summary
-    Configures the GPIO pin, RB10, as an input.
-
-  @Description
-    Configures the GPIO pin, RB10, as an input.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Sets the RB10 as an input
-    IO_RB10_SetDigitalInput();
-    </code>
-
-*/
-#define IO_RB10_SetDigitalInput()  (_TRISB10 = 1)
-/**
-  @Summary
-    Configures the GPIO pin, RB10, as an output.
-
-  @Description
-    Configures the GPIO pin, RB10, as an output.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Sets the RB10 as an output
-    IO_RB10_SetDigitalOutput();
-    </code>
-
-*/
-#define IO_RB10_SetDigitalOutput() (_TRISB10 = 0)
-/**
-  @Summary
-    Sets the GPIO pin, RB11, high using LATB11.
-
-  @Description
-    Sets the GPIO pin, RB11, high using LATB11.
-
-  @Preconditions
-    The RB11 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Set RB11 high (1)
-    IO_RB11_SetHigh();
-    </code>
-
-*/
-#define IO_RB11_SetHigh()          (_LATB11 = 1)
-/**
-  @Summary
-    Sets the GPIO pin, RB11, low using LATB11.
-
-  @Description
-    Sets the GPIO pin, RB11, low using LATB11.
-
-  @Preconditions
-    The RB11 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Set RB11 low (0)
-    IO_RB11_SetLow();
-    </code>
-
-*/
-#define IO_RB11_SetLow()           (_LATB11 = 0)
-/**
-  @Summary
-    Toggles the GPIO pin, RB11, using LATB11.
-
-  @Description
-    Toggles the GPIO pin, RB11, using LATB11.
-
-  @Preconditions
-    The RB11 must be set to an output.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Toggle RB11
-    IO_RB11_Toggle();
-    </code>
-
-*/
-#define IO_RB11_Toggle()           (_LATB11 ^= 1)
-/**
-  @Summary
-    Reads the value of the GPIO pin, RB11.
-
-  @Description
-    Reads the value of the GPIO pin, RB11.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    uint16_t portValue;
-
-    // Read RB11
-    postValue = IO_RB11_GetValue();
-    </code>
-
-*/
-#define IO_RB11_GetValue()         _RB11
-/**
-  @Summary
-    Configures the GPIO pin, RB11, as an input.
-
-  @Description
-    Configures the GPIO pin, RB11, as an input.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Sets the RB11 as an input
-    IO_RB11_SetDigitalInput();
-    </code>
-
-*/
-#define IO_RB11_SetDigitalInput()  (_TRISB11 = 1)
-/**
-  @Summary
-    Configures the GPIO pin, RB11, as an output.
-
-  @Description
-    Configures the GPIO pin, RB11, as an output.
-
-  @Preconditions
-    None.
-
-  @Returns
-    None.
-
-  @Param
-    None.
-
-  @Example
-    <code>
-    // Sets the RB11 as an output
-    IO_RB11_SetDigitalOutput();
-    </code>
-
-*/
-#define IO_RB11_SetDigitalOutput() (_TRISB11 = 0)
-/**
-  @Summary
     Sets the GPIO pin, RB12, high using LATB12.
 
   @Description
@@ -2263,11 +1971,11 @@
   @Example
     <code>
     // Set RB8 high (1)
-    IO_RB8_SetHigh();
+    BUTTON1_SetHigh();
     </code>
 
 */
-#define IO_RB8_SetHigh()          (_LATB8 = 1)
+#define BUTTON1_SetHigh()          (_LATB8 = 1)
 /**
   @Summary
     Sets the GPIO pin, RB8, low using LATB8.
@@ -2287,11 +1995,11 @@
   @Example
     <code>
     // Set RB8 low (0)
-    IO_RB8_SetLow();
+    BUTTON1_SetLow();
     </code>
 
 */
-#define IO_RB8_SetLow()           (_LATB8 = 0)
+#define BUTTON1_SetLow()           (_LATB8 = 0)
 /**
   @Summary
     Toggles the GPIO pin, RB8, using LATB8.
@@ -2311,11 +2019,11 @@
   @Example
     <code>
     // Toggle RB8
-    IO_RB8_Toggle();
+    BUTTON1_Toggle();
     </code>
 
 */
-#define IO_RB8_Toggle()           (_LATB8 ^= 1)
+#define BUTTON1_Toggle()           (_LATB8 ^= 1)
 /**
   @Summary
     Reads the value of the GPIO pin, RB8.
@@ -2337,11 +2045,11 @@
     uint16_t portValue;
 
     // Read RB8
-    postValue = IO_RB8_GetValue();
+    postValue = BUTTON1_GetValue();
     </code>
 
 */
-#define IO_RB8_GetValue()         _RB8
+#define BUTTON1_GetValue()         _RB8
 /**
   @Summary
     Configures the GPIO pin, RB8, as an input.
@@ -2361,11 +2069,11 @@
   @Example
     <code>
     // Sets the RB8 as an input
-    IO_RB8_SetDigitalInput();
+    BUTTON1_SetDigitalInput();
     </code>
 
 */
-#define IO_RB8_SetDigitalInput()  (_TRISB8 = 1)
+#define BUTTON1_SetDigitalInput()  (_TRISB8 = 1)
 /**
   @Summary
     Configures the GPIO pin, RB8, as an output.
@@ -2385,11 +2093,11 @@
   @Example
     <code>
     // Sets the RB8 as an output
-    IO_RB8_SetDigitalOutput();
+    BUTTON1_SetDigitalOutput();
     </code>
 
 */
-#define IO_RB8_SetDigitalOutput() (_TRISB8 = 0)
+#define BUTTON1_SetDigitalOutput() (_TRISB8 = 0)
 /**
   @Summary
     Sets the GPIO pin, RB9, high using LATB9.
