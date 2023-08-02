@@ -610,6 +610,7 @@ void neutral_height(void) {
 
 int main(void)
 {
+    signed short run0 = 256; 
     uint8_t btn1s = 0; // ボタンが連続で押された回数
     uint8_t btn0s = 0; // ボタンが連続で押されていない回数
     
@@ -635,23 +636,23 @@ int main(void)
     data[0] = data[1] = data[2] = data[3] = 0;
     data[4] = data[5] = data[6] = data[7] = 0x80; // 停止
     motor = step_val[0] = step_val[1] = 128;
-
+    uint16_t t;
+    
     while (1)
     {
         WATCHDOG_TimerClear();
 
-        uint16_t t;
-        for (t=0; t<TIMEOUT; t++) {
-            if (check_rsv()) {
-                break;
-            }
-            __delay_ms(1);
-        }
-        clear_rsv_size();
+        //for (t=0; t<TIMEOUT; t++) {
+        //    if (check_rsv()) {
+        //        break;
+        //    }
+        //    __delay_ms(1);
+        //}
+        //clear_rsv_size();
 
         signed long x2 = (signed long)(roll - roll0 + wx);
         signed long x512 = (x2 * 512);
-        signed long hosei2d = (cannon - x512) / 8;
+        signed long hosei2d = (cannon - x512) / 20;
         if (hosei2d > 100000) {
             hosei2d = 100000;
         }
@@ -682,6 +683,11 @@ int main(void)
             }
         }
 
+        signed short run = buf[4];
+        run += (signed short)(buf[5]);
+        
+        
+        
         if ((data[0] & 1) == 0) { // 通信エラーもしくはノーコン
             if (nocon < 255) nocon ++;
         }
@@ -692,30 +698,27 @@ int main(void)
         if (nocon > 100) { // 通信エラーもしくはノーコンが続いている
             waiting_position(); // サスアーム収納ポジション
         }
-        else if (data[1] & 3) { // 左UDボタンを押す
-            neutral_position(x512); // 俯仰水平に
-        }
-        else if (data[0] & 12) { // 右LRボタンを押す
-            neutral_height(); // 車高中立に
-        }
+        //else if (data[1] & 3) { // 左UDボタンを押す
+        //    neutral_position(x512); // 俯仰水平に
+        //}
+        //else if (data[0] & 12) { // 右LRボタンを押す
+        //    neutral_height(); // 車高中立に
+        //}
         else {
             //HL16 x16;
             //x16.L = data[2];
             //x16.H = data[3];
             //signed short x = x16.SHL;
             signed short x = (pitch - pitch0 + wy);
-            x >>= 1;
+            //x >>= 1;
+            x >>= 3;
             signed short y = data[5];
             y -= 128;
-            height += y;
-            if (y > 112) {
-                height = 0;
+            if (y < 0) {
+                height = y * 64;
             }
-            if (height < -8000) {
-                height = -8000;
-            }
-            if (height > 2000) {
-                height = 2000;
+            else {
+                height = y * 16;
             }
             hosei += x;
 
@@ -776,6 +779,7 @@ int main(void)
             LCD_i2C_data(buf);
             while (1) ;
         }
+        run0 = run;
     }
     return 1; 
 }
